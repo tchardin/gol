@@ -36,11 +36,11 @@ ganache-cli
 ```
 Compile Dharma smart contracts:
 ```
-truffle compile
+yarn compile
 ```
 Deploy Dharma smart contracts on to `testrpc`:
 ```
-truffle migrate
+yarn migrate
 ```
 
 ##### Start Server

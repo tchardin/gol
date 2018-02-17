@@ -58,9 +58,12 @@
     "react-bootstrap": "^0.32.1",
     "react-dom": "^15.4.2",
     "tiny-promisify": "^1.0.0",
+    "truffle": "4.0.3",
     "zeppelin-solidity": "^1.6.0"
   },
   "scripts": {
+    "compile": "truffle compile",
+    "migrate": "truffle migrate",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom"
