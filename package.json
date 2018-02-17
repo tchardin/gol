@@ -51,6 +51,7 @@
   "dependencies": {
     "@dharmaprotocol/dharma.js": "^0.0.11",
     "NonFungibleToken": "https://github.com/dharmaprotocol/NonFungibleToken",
+    "bignumber.js": "^6.0.0",
     "bootstrap": "^4.0.0",
     "dotenv": "^2.0.0",
     "ganache-cli": "^6.0.3",
