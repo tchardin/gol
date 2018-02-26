@@ -23,6 +23,8 @@ We recommend brushing up on the basics of Dharma protocol before diving in -- a 
 ---------------
 ##### Dependencies
 
+Must have `node` installed with version `>= 7.5.0`.
+
 Install dependencies:
 ```
 yarn
