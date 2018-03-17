@@ -1,0 +1,114 @@
+.nav {
+  position: sticky;
+  background-color: #fff;
+  border-bottom: 1px solid #dbdbdbdb;
+  height: 70px;
+  width: 100%;
+  display: flex;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.nav-left,
+.nav-right {
+  display: flex;
+  flex: 1;
+  align-items: center;
+}
+
+.nav-left {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.nav-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.nav-item {
+  padding: 1rem;
+}
+
+.nav-link {
+  font-size: 0.8rem;
+}
+
+.nav-link.is-main {
+  padding: 0.8em 2em;
+  border: 1px solid #4054FF;
+  border-radius: 200px;
+  color: #4054FF;
+}
+
+.nav-link.is-main:hover {
+  background-color: #4054FF;
+  color: #fff;
+}
+
+.title {
+  font-size: 2em;
+  font-weight: bold;
+  color: #404040;
+}
+
+.form-container {
+  max-width: 650px;
+  margin: auto;
+}
+
+.form-header {
+  padding: 3em 5em;
+}
+
+.form-body {
+  padding: 1rem 5em 3rem 5rem;
+  min-height: 430px;
+}
+
+.form-nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1em;
+}
+
+.form-subtitle {
+  color: #101010;
+}
+
+.label-description {
+  color: #808080;
+}
+
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.requests-listing {
+  height: 50%;
+  width: 100%;
+  display: inline;
+  display: flex;
+}
+
+.card-outer {
+  height: 300px;
+  width: 250px;
+  margin: 1rem;
+  margin-right: 0;
+}
+
+.card-router:last-child {
+  margin-right: 1rem;
+}
+
+.plus-button {
+  color: #4054FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}

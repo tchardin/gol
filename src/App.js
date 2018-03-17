@@ -1,9 +1,14 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import promisify from "tiny-promisify"
 import Dharma from "@dharmaprotocol/dharma.js";
 import BigNumber from "bignumber.js";
 
-import { Button, FormGroup, ControlLabel, FormControl, HelpBlock, Well } from "react-bootstrap";
+// import { Button, FormGroup, ControlLabel, FormControl, HelpBlock, Well } from "react-bootstrap";
+import TextInput from './components/TextInput'
+import Button from './components/Button'
+import Select, {SelectItem} from './components/Select'
+
 
 import DebtKernel from '../build/contracts/DebtKernel.json'
 import DebtRegistry from '../build/contracts/DebtRegistry.json'
@@ -14,13 +19,12 @@ import DebtToken from '../build/contracts/DebtToken.json'
 import TermsContractRegistry from "../build/contracts/TermsContractRegistry.json"
 
 import getWeb3 from './utils/getWeb3'
-
-import './css/open-sans.css'
-import './css/pure-min.css'
-import './App.css'
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
+const Buffer = require('buffer/').Buffer
 
 class App extends Component {
+  static contextTypes = {
+    ipfsNode: PropTypes.instanceOf(Object)
+  }
   constructor(props) {
     super(props)
 
@@ -40,9 +44,28 @@ class App extends Component {
       dharma: null,
       debtOrder: null,
       debtOrderSigned: false,
-      principalTokenSymbol: "REP",
+      principalAmount: "",
+      interestRate: "",
+      principalTokenSymbol: "",
       amortizationUnit: "hours",
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {
+      selected: {amount,coin,rate}
+    } = nextProps
+    // const {
+    //   principalAmount,
+    //   interestRate,
+    //   principalTokenSymbol
+    // } = this.state
+          this.setState({
+            principalAmount: amount,
+            principalTokenSymbol: coin,
+            interestRate: rate
+          })
+        
   }
 
   componentWillMount() {
@@ -127,7 +150,7 @@ class App extends Component {
       // Sign as debtor
       const debtorSignature = await this.state.dharma.sign.asDebtor(debtOrder);
       const signedDebtOrder = Object.assign({ debtorSignature }, debtOrder);
-
+      this.addIPFSFile(JSON.stringify(signedDebtOrder))
       this.setState({ debtOrder: JSON.stringify(signedDebtOrder), debtOrderSigned: true });
   }
 
@@ -198,94 +221,105 @@ class App extends Component {
       }
   }
 
+  handleChange = ({target}) => {
+    this.setState({
+      [target.id]: target.value
+    })
+  }
+
+  addIPFSFile = file => {
+    const {ipfsNode} = this.context
+    ipfsNode.files.add([Buffer.from(JSON.stringify(file))], (err, filesAdded) => {
+      if (err) throw err
+
+      const hash = filesAdded[0].hash
+      ipfsNode.files.cat(hash, (err, data) => {
+        if (err) throw err
+        const catRes = JSON.parse(data.toString('utf8'))
+        console.log(JSON.parse(catRes))
+      })
+    })
+  }
+
   render() {
+    const {
+      principalAmount,
+      interestRate,
+      principalTokenSymbol
+    } = this.state
     return (
-      <div className="App">
-        <main className="container">
-          <div className="pure-g">
-            <div className="pure-u-1-1">
-            <h1>Dharma Javascript Library Starter Kit</h1>
-            <h3><b>Generate a simple loan request:</b></h3>
-            <form>
-               <FormGroup
-                 controlId="formBasicText"
-               >
-                 <ControlLabel>Principal Amount</ControlLabel>
-                 <FormControl
-                   type="number"
-                   placeholder="100.3"
-                   onChange={this.handlePrincipalAmountChange}
-                 />
-                 <HelpBlock>Enter the amount of tokens you would like to borrow.</HelpBlock>
-               </FormGroup>
-               <FormGroup controlId="formControlsSelect">
-                  <ControlLabel>Principal Token</ControlLabel>
-                  <FormControl
-                    componentClass="select"
-                    placeholder="select"
-                    onChange={this.handlePrincipalTokenChange}
-                >
-                    <option value="REP">Augur (REP)</option>
-                    <option value="MKR">Maker DAO (MKR)</option>
-                    <option value="ZRX">0x Token (ZRX)</option>
-                  </FormControl>
-                  <HelpBlock>Choose which token you would like to borrow.</HelpBlock>
-                </FormGroup>
-                <FormGroup controlId="formControlsSelect">
-                   <ControlLabel>Interest Rate</ControlLabel>
-                   <FormControl
-                     type="number"
-                     step="0.001"
-                     placeholder="8.12%"
-                     onChange={this.handleInterestRateChange}
-                   />
-                   <HelpBlock>Specify your desired interest rate.</HelpBlock>
-                 </FormGroup>
-                 <FormGroup controlId="formControlsSelect">
-                    <ControlLabel>Intstallments Type</ControlLabel>
-                    <FormControl
-                        componentClass="select"
-                        placeholder="select"
-                        onChange={this.handleInstallmentsTypeChange}
-                    >
-                      <option value="hours">Hourly</option>
-                      <option value="days">Daily</option>
-                      <option value="weeks">Weekly</option>
-                      <option value="months">Monthly</option>
-                      <option value="years">Yearly</option>
-                    </FormControl>
-                    <HelpBlock>Specify how often you would like repayments to be due.</HelpBlock>
-                  </FormGroup>
-                  <FormGroup
-                    controlId="formBasicText"
-                  >
-                    <ControlLabel>Term Length</ControlLabel>
-                    <FormControl
-                      type="number"
-                      placeholder="3"
-                      onChange={this.handleTermLengthChange}
-                    />
-                    <HelpBlock>Enter the length of the entire debt agreement, in units of the chosen installments (e.g. a term length of 2 with an installment type of "monthly" would be equivalent to a 2 month long loan)</HelpBlock>
-                  </FormGroup>
-                  <Button
-                    bsStyle="primary"
-                    onClick={this.onGenerateDebtOrder}
-                  >
-                    Generate Debt Order
-                  </Button>
-                  <br/><br/>
-                  <Button
-                    bsStyle="primary"
-                    onClick={this.onSignDebtOrder}
-                  >
-                    Sign Debt Order
-                  </Button>
-                  <code>{this.state.debtOrder}</code>
-                  { this.renderFillButton() }
-             </form>
-            </div>
+      <div className="form-container">
+        <div className="form-header">
+          <h1 className="title">Create a debt order</h1>
+        </div>
+        <div className="form-body">
+          <TextInput
+            id="principalAmount"
+            type="number"
+            labelText="Principal Amount"
+            placeholder="100"
+            value={principalAmount}
+            onChange={this.handleChange}/>
+          <Select
+            id="principalToken"
+            labelText="Principal Token"
+            value={principalTokenSymbol}>
+            <SelectItem
+              value="REP"
+              text="Augur (REP)"/>
+            <SelectItem
+              value="MKR"
+              text="Maker DAO (MKR)"/>
+            <SelectItem
+              value="ZRX"
+              text="0x Token (ZRX)"/>
+          </Select>
+          <TextInput
+            id="interestRate"
+            type="number"
+            labelText="Interest Rate"
+            placeholder="8.12%"
+            value={interestRate}
+            onChange={this.handleChange}/>
+          <Select
+            id="installmentsType"
+            labelText="Installment Type">
+            <SelectItem
+              value="hours"
+              text="Hourly"/>
+            <SelectItem
+              value="days"
+              text="Daily"/>
+            <SelectItem
+              value="weeks"
+              text="weekly"/>
+            <SelectItem
+              value="months"
+              text="Monthly"/>
+            <SelectItem
+              value="years"
+              text="Yearly"/>
+          </Select>
+          <TextInput
+            id="termLength"
+            type="number"
+            labelText="Term Length"
+            placeholder="3"
+            onChange={this.handleChange}/>
+          <div className="form-nav">
+            {this.state.debtOrder ? (
+              <Button
+                onClick={() => this.onSignDebtOrder()}>
+                Sign Debt Order
+              </Button>
+            ) : (
+              <Button
+                onClick={() => this.onGenerateDebtOrder()}>
+                Create Debt Order
+              </Button>
+            )}
           </div>
-        </main>
+        </div>
       </div>
     );
   }

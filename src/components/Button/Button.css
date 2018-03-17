@@ -1,0 +1,46 @@
+.btn {
+  border-radius: 727px;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  display: inline-block;
+  font-size: 0.875rem;
+  letter-spacing: 0.25em;
+  line-height: 1;
+  padding: 1.25em 2em;
+  text-shadow: none;
+  transition-property: box-shadow, transform;
+  text-transform: uppercase;
+  transform-origin: center;
+  transition-duration: 100ms;
+  user-select: none;
+  vertical-align: top;
+  white-space: nowrap;
+  will-change: box-shadow, transform;
+  border: 0;
+}
+
+.btn:hover {
+  box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.2);
+  transform: scale(1.01) translateY(-2px);
+}
+
+.btn:active {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
+  transform: scale(0.99) translateY(-1px);
+}
+
+/* Specific */
+
+.btn--sm {
+  font-size: 0.6rem;
+}
+
+.btn--primary {
+  color: #fff;
+  background-color: #4054FF;
+}
+
+.btn--secondary {
+  color: #4054FF;
+  background-color: #fff;
+}

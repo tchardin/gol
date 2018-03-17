@@ -1,0 +1,26 @@
+.file {
+  margin-top: 1rem;
+}
+
+.visually-hidden {
+  display: none;
+}
+
+.loading {
+
+}
+
+.loading__svg {
+
+}
+
+.file-container {
+  margin-top: 2rem;
+}
+
+.file__selected-file {
+  color: #404040;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

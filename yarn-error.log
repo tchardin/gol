@@ -1,14 +1,14 @@
 Arguments: 
-  /Users/nadavhollander/.nvm/versions/node/v8.9.4/bin/node /Users/nadavhollander/.yarn/bin/yarn.js chain
+  /Users/thomaschardin/.nvm/versions/node/v9.5.0/bin/node /usr/local/Cellar/yarn/1.5.1/libexec/bin/yarn.js add uport-connect --ignore-engines
 
 PATH: 
-  /Users/nadavhollander/.yarn/bin:/Users/nadavhollander/.config/yarn/global/node_modules/.bin:/usr/local/opt/sqlite/bin:/Users/nadavhollander/.nvm/versions/node/v8.9.4/bin:/Users/nadavhollander/Library/Python/2.7/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+  /Users/thomaschardin/.nvm/versions/node/v9.5.0/bin:/Users/thomaschardin/anaconda3/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
 Yarn version: 
   1.5.1
 
 Node version: 
-  8.9.4
+  9.5.0
 
 Platform: 
   darwin x64
@@ -65,17 +65,20 @@ npm manifest:
       "whatwg-fetch": "1.0.0"
     },
     "dependencies": {
-      "@dharmaprotocol/dharma.js": "^0.0.11",
+      "@dharmaprotocol/dharma.js": "^0.0.14",
       "NonFungibleToken": "https://github.com/dharmaprotocol/NonFungibleToken",
       "bignumber.js": "^5.0.0",
       "bootstrap": "^4.0.0",
       "dotenv": "^2.0.0",
       "ganache-cli": "^6.0.3",
+      "ipfs": "^0.28.2",
       "react": "^15.4.2",
       "react-bootstrap": "^0.32.1",
       "react-dom": "^15.4.2",
+      "react-router-dom": "^4.2.0",
       "tiny-promisify": "^1.0.0",
       "truffle": "4.0.3",
+      "uport-connect": "^0.7.1",
       "zeppelin-solidity": "^1.6.0"
     },
     "scripts": {
@@ -135,9 +138,9 @@ Lockfile:
   # yarn lockfile v1
   
   
-  "@dharmaprotocol/dharma.js@^0.0.11":
-    version "0.0.11"
-    resolved "https://registry.yarnpkg.com/@dharmaprotocol/dharma.js/-/dharma.js-0.0.11.tgz#7350fb748ebf7817bfb0d82f96b9edd3cecf0cd9"
+  "@dharmaprotocol/dharma.js@^0.0.14":
+    version "0.0.14"
+    resolved "https://registry.yarnpkg.com/@dharmaprotocol/dharma.js/-/dharma.js-0.0.14.tgz#017ef2213c07d233bb9fda514d673b4462378ec4"
     dependencies:
       bignumber.js "^5.0.0"
       ethereumjs-util "^5.1.4"
@@ -153,6 +156,7 @@ Lockfile:
       moment "^2.20.1"
       single-line-string "^0.0.2"
       tiny-promisify "^1.0.0"
+      typedoc-plugin-markdown "^1.0.14"
       web3 "0.20.4"
       web3-typescript-typings "^0.9.5"
       web3-utils "1.0.0-beta.29"
@@ -1446,6 +1450,10 @@ Lockfile:
     dependencies:
       safe-buffer "^5.0.1"
   
+  block-elements@^1.0.0:
+    version "1.2.0"
+    resolved "https://registry.yarnpkg.com/block-elements/-/block-elements-1.2.0.tgz#8e04ccab638c7e2596f5065fb6c1c7518c905a5d"
+  
   block-stream@*:
     version "0.0.9"
     resolved "https://registry.yarnpkg.com/block-stream/-/block-stream-0.0.9.tgz#13ebfe778a03205cfe03751481ebb4b3300c126a"
@@ -1967,6 +1975,13 @@ Lockfile:
     dependencies:
       bs58 "^2.0.1"
       create-hash "^1.1.1"
+  
+  collapse-whitespace@1.1.2:
+    version "1.1.2"
+    resolved "https://registry.yarnpkg.com/collapse-whitespace/-/collapse-whitespace-1.1.2.tgz#b9b31d79d5594ee3c22c15819c54828e565b3085"
+    dependencies:
+      block-elements "^1.0.0"
+      void-elements "^2.0.1"
   
   color-convert@^1.3.0, color-convert@^1.9.0:
     version "1.9.1"
@@ -4612,7 +4627,7 @@ Lockfile:
     version "0.1.1"
     resolved "https://registry.yarnpkg.com/jsbn/-/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
   
-  jsdom@^9.9.1:
+  jsdom@^9.0.0, jsdom@^9.9.1:
     version "9.12.0"
     resolved "https://registry.yarnpkg.com/jsdom/-/jsdom-9.12.0.tgz#e8c546fffcb06c00d4833ca84410fed7f8a097d4"
     dependencies:
@@ -7650,6 +7665,13 @@ Lockfile:
     version "0.0.2"
     resolved "https://registry.yarnpkg.com/to-iso-string/-/to-iso-string-0.0.2.tgz#4dc19e664dfccbe25bd8db508b00c6da158255d1"
   
+  to-markdown@^3.1.1:
+    version "3.1.1"
+    resolved "https://registry.yarnpkg.com/to-markdown/-/to-markdown-3.1.1.tgz#251e241b8c74c7ad177292e6c52cc195c9268c11"
+    dependencies:
+      collapse-whitespace "1.1.2"
+      jsdom "^9.0.0"
+  
   toposort@^1.0.0:
     version "1.0.6"
     resolved "https://registry.yarnpkg.com/toposort/-/toposort-1.0.6.tgz#c31748e55d210effc00fdcdc7d6e68d7d7bb9cec"
@@ -7817,6 +7839,12 @@ Lockfile:
   typedarray@^0.0.6, typedarray@~0.0.5:
     version "0.0.6"
     resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
+  
+  typedoc-plugin-markdown@^1.0.14:
+    version "1.0.14"
+    resolved "https://registry.yarnpkg.com/typedoc-plugin-markdown/-/typedoc-plugin-markdown-1.0.14.tgz#f2347d1a263f15026ea4b58dc75aab40efc63071"
+    dependencies:
+      to-markdown "^3.1.1"
   
   ua-parser-js@^0.7.9:
     version "0.7.17"
@@ -8011,6 +8039,10 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-0.0.4.tgz#5d7ea45bbef9e4a6ff65f95438e0a87c357d5a73"
     dependencies:
       indexof "0.0.1"
+  
+  void-elements@^2.0.1:
+    version "2.0.1"
+    resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-2.0.1.tgz#c066afb582bb1cb4128d60ea92392e94d5e9dbec"
   
   walker@~1.0.5:
     version "1.0.7"
@@ -8565,14 +8597,37 @@ Lockfile:
       ethjs-abi "^0.2.1"
 
 Trace: 
-  Error: Command "chain" not found.
-      at new MessageError (/Users/nadavhollander/.yarn/lib/cli.js:186:110)
-      at /Users/nadavhollander/.yarn/lib/cli.js:87307:17
-      at Generator.next (<anonymous>)
-      at step (/Users/nadavhollander/.yarn/lib/cli.js:98:30)
-      at /Users/nadavhollander/.yarn/lib/cli.js:116:14
-      at new Promise (<anonymous>)
-      at new F (/Users/nadavhollander/.yarn/lib/cli.js:23451:28)
-      at /Users/nadavhollander/.yarn/lib/cli.js:95:12
-      at runCommand (/Users/nadavhollander/.yarn/lib/cli.js:87312:22)
-      at Object.<anonymous> (/Users/nadavhollander/.yarn/lib/cli.js:87412:14)
+  Error: /Users/thomaschardin/Documents/Apps/Dapps/dharma-react-starter-kit/node_modules/sha3: Command failed.
+  Exit code: 1
+  Command: sh
+  Arguments: -c node-gyp rebuild
+  Directory: /Users/thomaschardin/Documents/Apps/Dapps/dharma-react-starter-kit/node_modules/sha3
+  Output:
+  gyp info it worked if it ends with ok
+  gyp info using node-gyp@3.6.2
+  gyp info using node@9.5.0 | darwin | x64
+  gyp ERR! configure error 
+  gyp ERR! stack Error: Python executable "/Users/thomaschardin/anaconda3/bin/python" is v3.5.2, which is not supported by gyp.
+  gyp ERR! stack You can pass the --python switch to point to Python >= v2.5.0 & < 3.0.0.
+  gyp ERR! stack     at PythonFinder.failPythonVersion (/Users/thomaschardin/.nvm/versions/node/v9.5.0/lib/node_modules/npm/node_modules/node-gyp/lib/configure.js:492:19)
+  gyp ERR! stack     at PythonFinder.<anonymous> (/Users/thomaschardin/.nvm/versions/node/v9.5.0/lib/node_modules/npm/node_modules/node-gyp/lib/configure.js:474:14)
+  gyp ERR! stack     at ChildProcess.exithandler (child_process.js:264:7)
+  gyp ERR! stack     at ChildProcess.emit (events.js:160:13)
+  gyp ERR! stack     at maybeClose (internal/child_process.js:943:16)
+  gyp ERR! stack     at Socket.stream.socket.on (internal/child_process.js:363:11)
+  gyp ERR! stack     at Socket.emit (events.js:160:13)
+  gyp ERR! stack     at Pipe._handle.close [as _onclose] (net.js:562:12)
+  gyp ERR! System Darwin 16.7.0
+  gyp ERR! command "/Users/thomaschardin/.nvm/versions/node/v9.5.0/bin/node" "/Users/thomaschardin/.nvm/versions/node/v9.5.0/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js" "rebuild"
+  gyp ERR! cwd /Users/thomaschardin/Documents/Apps/Dapps/dharma-react-starter-kit/node_modules/sha3
+  gyp ERR! node -v v9.5.0
+  gyp ERR! node-gyp -v v3.6.2
+  gyp ERR! not ok
+      at ProcessTermError.MessageError (/usr/local/Cellar/yarn/1.5.1/libexec/lib/cli.js:186:110)
+      at new ProcessTermError (/usr/local/Cellar/yarn/1.5.1/libexec/lib/cli.js:226:113)
+      at ChildProcess.<anonymous> (/usr/local/Cellar/yarn/1.5.1/libexec/lib/cli.js:30281:17)
+      at ChildProcess.emit (events.js:160:13)
+      at maybeClose (internal/child_process.js:943:16)
+      at Socket.stream.socket.on (internal/child_process.js:363:11)
+      at Socket.emit (events.js:160:13)
+      at Pipe._handle.close [as _onclose] (net.js:562:12)
