@@ -49,7 +49,7 @@
     "whatwg-fetch": "1.0.0"
   },
   "dependencies": {
-    "@dharmaprotocol/dharma.js": "^0.0.11",
+    "@dharmaprotocol/dharma.js": "^0.0.14",
     "NonFungibleToken": "https://github.com/dharmaprotocol/NonFungibleToken",
     "bignumber.js": "^5.0.0",
     "bootstrap": "^4.0.0",

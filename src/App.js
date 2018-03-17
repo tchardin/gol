@@ -6,6 +6,7 @@ import BigNumber from "bignumber.js";
 import { Button, FormGroup, ControlLabel, FormControl, HelpBlock, Well } from "react-bootstrap";
 
 import DebtKernel from '../build/contracts/DebtKernel.json'
+import DebtRegistry from '../build/contracts/DebtRegistry.json'
 import RepaymentRouter from '../build/contracts/RepaymentRouter.json'
 import TokenTransferProxy from '../build/contracts/TokenTransferProxy.json'
 import TokenRegistry from '../build/contracts/TokenRegistry.json'
@@ -31,11 +32,14 @@ class App extends Component {
 
     this.onGenerateDebtOrder = this.onGenerateDebtOrder.bind(this);
     this.onSignDebtOrder = this.onSignDebtOrder.bind(this);
+    this.onFillDebtOrder = this.onFillDebtOrder.bind(this);
 
     this.state = {
       storageValue: 0,
       web3: null,
       dharma: null,
+      debtOrder: null,
+      debtOrderSigned: false,
       principalTokenSymbol: "REP",
       amortizationUnit: "hours",
     }
@@ -58,45 +62,45 @@ class App extends Component {
       console.log('Error instantiating Dharma contracts:' + e);
     })
   }
-  
+
   handlePrincipalAmountChange(e) {
       this.setState({
           principalAmount: e.target.value
       });
   }
-  
+
   handlePrincipalTokenChange(e) {
       this.setState({
           principalTokenSymbol: e.target.value
       });
   }
-  
+
   handleInterestRateChange(e) {
       this.setState({
           interestRate: e.target.value
       });
   }
-  
+
   handleInstallmentsTypeChange(e) {
       this.setState({
           amortizationUnit: e.target.value
       });
   }
-  
+
   handleTermLengthChange(e) {
       this.setState({
           termLength: e.target.value
       });
   }
-  
+
   async onGenerateDebtOrder(e) {
       const { principalAmount, principalTokenSymbol, interestRate, amortizationUnit, termLength } = this.state;
-      
+
       const dharma = this.state.dharma;
-      
+
       const tokenRegistry = await dharma.contracts.loadTokenRegistry();
       const principalToken = await tokenRegistry.getTokenAddress.callAsync(principalTokenSymbol);
-      
+
       const simpleInterestLoan = {
           principalToken,
           principalAmount: new BigNumber(principalAmount),
@@ -104,43 +108,68 @@ class App extends Component {
           amortizationUnit,
           termLength: new BigNumber(termLength)
       };
-      
+
       const debtOrder = await dharma.adapters.simpleInterestLoan.toDebtOrder(simpleInterestLoan);
-      
+
       this.setState({ debtOrder: JSON.stringify(debtOrder) });
   }
-  
+
   async onSignDebtOrder(e) {
       if (!this.state.debtOrder) {
           throw new Error("No debt order has been generated yet!");
       }
-      
+
       const debtOrder = JSON.parse(this.state.debtOrder);
-          
+
       debtOrder.principalAmount = new BigNumber(debtOrder.principalAmount);
-        debtOrder.debtor = this.state.accounts[0];        
-    
-      // Sign as debtor 
+      debtOrder.debtor = this.state.accounts[0];
+
+      // Sign as debtor
       const debtorSignature = await this.state.dharma.sign.asDebtor(debtOrder);
-      const signedDebtOrder = Object.assign({ debtorSignature }, debtOrder);   
-            
-      this.setState({ debtOrder: JSON.stringify(signedDebtOrder) });
+      const signedDebtOrder = Object.assign({ debtorSignature }, debtOrder);
+
+      this.setState({ debtOrder: JSON.stringify(signedDebtOrder), debtOrderSigned: true });
+  }
+
+  async onFillDebtOrder(e) {
+      if (!this.state.debtOrder) {
+          throw new Error("No debt order has been generated yet!");
+      }
+
+      const debtOrder = JSON.parse(this.state.debtOrder);
+
+      debtOrder.principalAmount = new BigNumber(debtOrder.principalAmount);
+
+      // Specify account that will be acting as the creditor in this transaction
+      debtOrder.creditor = this.state.accounts[0];
+
+      const { dharma } = this.state;
+
+      const txHash = await dharma.order.fillAsync(debtOrder);
+
+      await dharma.blockchain.awaitTransactionMinedAsync(txHash);
+
+      const errors = await dharma.blockchain.getErrorLogs(txHash);
+
+      console.log(errors);
   }
 
   async instantiateDharma() {
     const networkId = await promisify(this.state.web3.version.getNetwork)();
     const accounts = await promisify(this.state.web3.eth.getAccounts)();
-    
-    if (!(networkId in DebtKernel.networks &&
+
+    if (!(networkId in DebtRegistry.networks &&
+          networkId in DebtKernel.networks &&
           networkId in RepaymentRouter.networks &&
           networkId in TokenTransferProxy.networks &&
-          networkId in TokenRegistry.networks && 
+          networkId in TokenRegistry.networks &&
           networkId in DebtToken.networks &&
           networkId in TermsContractRegistry.networks)) {
         throw new Error("Cannot find Dharma smart contracts on current Ethereum network.");
     }
-    
+
     const dharmaConfig = {
+        debtRegistryAddress: DebtRegistry.networks[networkId].address,
         kernelAddress: DebtKernel.networks[networkId].address,
         repaymentRouterAddress: RepaymentRouter.networks[networkId].address,
         tokenTransferProxyAddress: TokenTransferProxy.networks[networkId].address,
@@ -148,10 +177,25 @@ class App extends Component {
         debtTokenAddress: DebtToken.networks[networkId].address,
         termsContractRegistry: TermsContractRegistry.networks[networkId].address
     }
-    
+
     const dharma = new Dharma(this.state.web3.currentProvider, dharmaConfig);
-    
+
     this.setState({ dharma, accounts });
+  }
+
+  renderFillButton() {
+      if (this.state.debtOrder && this.state.debtOrderSigned) {
+          return (
+              <Button
+                bsStyle="primary"
+                onClick={this.onFillDebtOrder}
+              >
+                Fill Debt Order
+              </Button>
+          )
+      } else {
+          return null;
+      }
   }
 
   render() {
@@ -176,8 +220,8 @@ class App extends Component {
                </FormGroup>
                <FormGroup controlId="formControlsSelect">
                   <ControlLabel>Principal Token</ControlLabel>
-                  <FormControl 
-                    componentClass="select" 
+                  <FormControl
+                    componentClass="select"
                     placeholder="select"
                     onChange={this.handlePrincipalTokenChange}
                 >
@@ -199,7 +243,7 @@ class App extends Component {
                  </FormGroup>
                  <FormGroup controlId="formControlsSelect">
                     <ControlLabel>Intstallments Type</ControlLabel>
-                    <FormControl 
+                    <FormControl
                         componentClass="select"
                         placeholder="select"
                         onChange={this.handleInstallmentsTypeChange}
@@ -237,7 +281,7 @@ class App extends Component {
                     Sign Debt Order
                   </Button>
                   <code>{this.state.debtOrder}</code>
-                  
+                  { this.renderFillButton() }
              </form>
             </div>
           </div>
