@@ -4,7 +4,6 @@ import promisify from "tiny-promisify"
 import Dharma from "@dharmaprotocol/dharma.js";
 import BigNumber from "bignumber.js";
 
-// import { Button, FormGroup, ControlLabel, FormControl, HelpBlock, Well } from "react-bootstrap";
 import TextInput from './components/TextInput'
 import Button from './components/Button'
 import Select, {SelectItem} from './components/Select'
@@ -44,28 +43,11 @@ class App extends Component {
       dharma: null,
       debtOrder: null,
       debtOrderSigned: false,
-      principalAmount: "",
-      interestRate: "",
-      principalTokenSymbol: "",
+      principalAmount: this.props.selected.amount || "",
+      interestRate: this.props.selected.rate || "",
+      principalTokenSymbol: this.props.selected.token || "",
       amortizationUnit: "hours",
     }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const {
-      selected: {amount,coin,rate}
-    } = nextProps
-    // const {
-    //   principalAmount,
-    //   interestRate,
-    //   principalTokenSymbol
-    // } = this.state
-          this.setState({
-            principalAmount: amount,
-            principalTokenSymbol: coin,
-            interestRate: rate
-          })
-        
   }
 
   componentWillMount() {
