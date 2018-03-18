@@ -1,3 +1,7 @@
+.home {
+  height: 100%;
+}
+
 .nav {
   position: sticky;
   background-color: #fff;
@@ -111,4 +115,8 @@
   align-items: center;
   justify-content: center;
   height: 100%;
+}
+
+.listing {
+  height: 70%;
 }

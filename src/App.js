@@ -43,9 +43,9 @@ class App extends Component {
       dharma: null,
       debtOrder: null,
       debtOrderSigned: false,
-      principalAmount: this.props.selected.amount || "",
-      interestRate: this.props.selected.rate || "",
-      principalTokenSymbol: this.props.selected.token || "",
+      principalAmount: 0,
+      interestRate: 0,
+      principalTokenSymbol: "REP",
       amortizationUnit: "hours",
     }
   }
@@ -113,6 +113,8 @@ class App extends Component {
           amortizationUnit,
           termLength: new BigNumber(termLength)
       };
+
+      console.log(simpleInterestLoan)
 
       const debtOrder = await dharma.adapters.simpleInterestLoan.toDebtOrder(simpleInterestLoan);
 
@@ -240,12 +242,10 @@ class App extends Component {
             type="number"
             labelText="Principal Amount"
             placeholder="100"
-            value={principalAmount}
             onChange={this.handleChange}/>
           <Select
             id="principalToken"
-            labelText="Principal Token"
-            value={principalTokenSymbol}>
+            labelText="Principal Token">
             <SelectItem
               value="REP"
               text="Augur (REP)"/>
@@ -261,7 +261,6 @@ class App extends Component {
             type="number"
             labelText="Interest Rate"
             placeholder="8.12%"
-            value={interestRate}
             onChange={this.handleChange}/>
           <Select
             id="installmentsType"

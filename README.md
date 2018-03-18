@@ -1,23 +1,12 @@
-<img src="https://s3-us-west-2.amazonaws.com/dharma-assets/logo+orange.png"  width=300/>
+## Game of Loans - MIT Bitcoin Hackathon
 
-------------
-
-## Dharma Protocol React Starter Kit
-
-This repository contains all the tools you need to quickly start hacking an application on top of Dharma protocol.
-
-The starter kit ships with:
+This hack uses:
 - The Dharma Protocol smart contracts and migrations tooling
 - The `dharma.js` client development libraries
 - React + Webpack
+- IPFS - JS library
+- Uport for authentication (Uport app currently not working).
 - The `truffle` Ethereum development framework.
-- A simple application that demonstrates how to generate a signed, loan request using the `dharma.js` development libraries.
-
-We recommend brushing up on the basics of Dharma protocol before diving in -- a non-techincal primer can be found [here](https://blog.dharma.io/dharma-protocol-in-a-nutshell-a7abcc716429).  For a deeper dive, study the [Dharma whitepaper](https://whitepaper.dharma.io).
-
-[Join us on our chat](https://chat.dharma.io) for any technical or general questions.
-
-> [Dharma](https://dharma.io) is a protocol for generic tokenized debt issuance and fundraising on blockchains supporting requisite smart contract functionality (i.e. EVM blockchains).  For a full description of the protocol's mechanics, a thorough overview can be found in the [Dharma Protocol Whitepaper](https://whitepaper.dharma.io/).  
 
 ### Setup
 ---------------

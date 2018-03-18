@@ -128,3 +128,7 @@ hr {
   background-color: #dbdbdb;
   opacity: 0.2;
 }
+
+#root {
+  height: 100vh;
+}
